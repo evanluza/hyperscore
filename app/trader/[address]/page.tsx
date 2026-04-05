@@ -15,6 +15,7 @@ import { PositionsTable } from "@/components/positions-table";
 import { RecentTrades } from "@/components/recent-trades";
 import { NextActions } from "@/components/next-actions";
 import { Nav } from "@/components/nav";
+import { HL_REFERRAL_URL } from "@/lib/constants";
 import Link from "next/link";
 
 interface Props {
@@ -270,6 +271,22 @@ export default async function TraderPage({ params }: Props) {
             Keep Exploring
           </h2>
           <NextActions currentAddress={address} />
+        </div>
+
+        {/* Referral CTA */}
+        <div className="glass rounded-xl p-6 text-center mb-8">
+          <p className="text-muted text-sm mb-3">
+            Want to trade like the top performers on Hyperliquid?
+          </p>
+          <a
+            href={HL_REFERRAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent text-bg font-semibold px-6 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
+          >
+            Start Trading on Hyperliquid
+            <span className="text-bg/60 text-xs">(4% fee discount)</span>
+          </a>
         </div>
       </main>
     </div>

@@ -8,6 +8,7 @@ import type { ParsedLeaderboardRow } from "@/lib/hyperliquid";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { HL_REFERRAL_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "HyperScore — Your Trading Reputation. Proven.",
@@ -179,6 +180,16 @@ export default async function Home() {
               See who&apos;s trending →
             </Link>
           </div>
+          <div className="mt-12">
+            <a
+              href={HL_REFERRAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-muted text-sm hover:text-accent transition-colors border border-border-subtle rounded-lg px-5 py-2.5 hover:border-accent/30"
+            >
+              Don&apos;t have a Hyperliquid account? Start trading →
+            </a>
+          </div>
         </div>
       </section>
 
@@ -191,9 +202,19 @@ export default async function Home() {
               HyperScore
             </span>
           </div>
-          <span className="text-muted text-xs">
-            Data sourced from Hyperliquid L1
-          </span>
+          <div className="flex items-center gap-4">
+            <span className="text-muted text-xs">
+              Data sourced from Hyperliquid L1
+            </span>
+            <a
+              href={HL_REFERRAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent/60 text-xs hover:text-accent transition-colors"
+            >
+              Trade on Hyperliquid
+            </a>
+          </div>
         </div>
       </footer>
     </div>
