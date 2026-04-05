@@ -9,13 +9,13 @@
   --border: #1a1f2c;
   --border-subtle: #141925;
   --muted: #5a6a7e;
-  --green: #22d68a;
-  --green-dim: rgba(34, 214, 138, 0.10);
-  --green-glow: rgba(34, 214, 138, 0.25);
+  --green: #97fce4;
+  --green-dim: rgba(151, 252, 228, 0.10);
+  --green-glow: rgba(151, 252, 228, 0.25);
   --red: #ef4444;
   --red-dim: rgba(239, 68, 68, 0.10);
-  --accent: #22d68a;
-  --accent-dim: rgba(34, 214, 138, 0.06);
+  --accent: #97fce4;
+  --accent-dim: rgba(151, 252, 228, 0.06);
   --gold: #f5b041;
   --silver: #a0aec0;
   --bronze: #cd7f32;
@@ -53,21 +53,21 @@ body {
 .glass {
   background: linear-gradient(135deg, rgba(15, 19, 24, 0.9), rgba(26, 32, 48, 0.6));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(34, 214, 138, 0.08);
+  border: 1px solid rgba(151, 252, 228, 0.08);
 }
 
 .glass-hover:hover {
-  border-color: rgba(34, 214, 138, 0.18);
-  box-shadow: 0 0 30px rgba(34, 214, 138, 0.04);
+  border-color: rgba(151, 252, 228, 0.18);
+  box-shadow: 0 0 30px rgba(151, 252, 228, 0.04);
 }
 
 /* Glow effects */
 .glow-green {
-  box-shadow: 0 0 20px rgba(34, 214, 138, 0.12), 0 0 60px rgba(34, 214, 138, 0.04);
+  box-shadow: 0 0 20px rgba(151, 252, 228, 0.12), 0 0 60px rgba(151, 252, 228, 0.04);
 }
 
 .glow-green-strong {
-  box-shadow: 0 0 30px rgba(34, 214, 138, 0.2), 0 0 80px rgba(34, 214, 138, 0.06);
+  box-shadow: 0 0 30px rgba(151, 252, 228, 0.2), 0 0 80px rgba(151, 252, 228, 0.06);
 }
 
 /* Score ring */
@@ -81,14 +81,14 @@ body {
 /* Subtle grid background */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(34, 214, 138, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 214, 138, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(151, 252, 228, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(151, 252, 228, 0.02) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 /* Gradient text */
 .text-gradient {
-  background: linear-gradient(135deg, #22d68a, #1ab8a0);
+  background: linear-gradient(135deg, #97fce4, #6ee7c2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -110,8 +110,8 @@ body {
 
 /* Pulse glow */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(34, 214, 138, 0.1); }
-  50% { box-shadow: 0 0 40px rgba(34, 214, 138, 0.2); }
+  0%, 100% { box-shadow: 0 0 20px rgba(151, 252, 228, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(151, 252, 228, 0.2); }
 }
 
 .animate-pulse-glow {

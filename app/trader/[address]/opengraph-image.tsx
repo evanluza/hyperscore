@@ -43,8 +43,8 @@ export default async function OGImage({
     );
   }
 
-  const pnlColor = stats.totalPnl >= 0 ? "#22d68a" : "#ef4444";
-  const dayPnlColor = stats.dayPnl >= 0 ? "#22d68a" : "#ef4444";
+  const pnlColor = stats.totalPnl >= 0 ? "#97fce4" : "#ef4444";
+  const dayPnlColor = stats.dayPnl >= 0 ? "#97fce4" : "#ef4444";
 
   return new ImageResponse(
     (
@@ -68,7 +68,7 @@ export default async function OGImage({
             marginBottom: "40px",
           }}
         >
-          <div style={{ color: "#22d68a", fontSize: 36, fontWeight: "bold" }}>
+          <div style={{ color: "#97fce4", fontSize: 36, fontWeight: "bold" }}>
             HyperScore
           </div>
           <div style={{ color: "#5a6a7e", fontSize: 24 }}>

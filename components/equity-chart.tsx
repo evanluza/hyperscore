@@ -36,9 +36,9 @@ export function EquityChart({ data, height = 200 }: EquityChartProps) {
     const endVal = values[values.length - 1];
     const isPositive = endVal >= startVal;
 
-    const lineColor = isPositive ? "#23dc8e" : "#f0444c";
+    const lineColor = isPositive ? "#97fce4" : "#f0444c";
     const fillColor = isPositive
-      ? "rgba(35, 220, 142, 0.08)"
+      ? "rgba(151, 252, 228, 0.08)"
       : "rgba(240, 68, 76, 0.08)";
 
     const chartW = w - padding.left - padding.right;

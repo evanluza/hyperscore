@@ -16,7 +16,7 @@ export function HyperScore({ score, size = "md", showLabel = true }: HyperScoreP
   const filled = (score / 100) * circumference;
 
   const color =
-    score >= 80 ? "#22d68a" : score >= 60 ? "#f5b041" : score >= 40 ? "#f59e0b" : "#ef4444";
+    score >= 80 ? "#97fce4" : score >= 60 ? "#f5b041" : score >= 40 ? "#f59e0b" : "#ef4444";
 
   return (
     <div className="flex flex-col items-center gap-1">

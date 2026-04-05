@@ -9,17 +9,14 @@ export function Nav({ active }: NavProps) {
   return (
     <header className="border-b border-border-subtle sticky top-0 z-50 bg-bg/80 backdrop-blur-xl">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center">
           <Image
-            src="/icon.png"
+            src="/logo.png"
             alt="HyperScore"
-            width={28}
-            height={28}
-            className="rounded-md"
+            width={140}
+            height={26}
+            priority
           />
-          <span className="text-accent font-bold text-lg font-mono tracking-tight hidden sm:inline">
-            HyperScore
-          </span>
         </Link>
         <nav className="flex items-center gap-5">
           <Link
