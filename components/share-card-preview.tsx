@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { HyperScore } from "./hyper-score";
 
 export function ShareCardPreview() {
@@ -7,7 +8,10 @@ export function ShareCardPreview() {
       <div className="glass glow-green rounded-2xl p-6 sm:p-8 max-w-sm mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <span className="text-accent font-mono font-bold text-sm">HyperScore</span>
+          <div className="flex items-center gap-1.5">
+            <Image src="/icon.png" alt="" width={18} height={18} className="rounded" />
+            <span className="text-accent font-mono font-bold text-sm">HyperScore</span>
+          </div>
           <span className="text-muted text-[10px] uppercase tracking-widest">30 Day Report</span>
         </div>
 

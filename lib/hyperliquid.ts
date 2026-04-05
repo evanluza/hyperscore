@@ -2,6 +2,7 @@ import type {
   ClearinghouseState,
   Fill,
   Portfolio,
+  PortfolioPerformance,
   LeaderboardRow,
   TraderStats,
 } from "./types";
@@ -26,7 +27,16 @@ export async function getClearinghouseState(
 }
 
 export async function getPortfolio(address: string): Promise<Portfolio> {
-  return hlPost({ type: "portfolio", user: address });
+  const raw = await hlPost<[string, PortfolioPerformance][]>({
+    type: "portfolio",
+    user: address,
+  });
+  // API returns array of [key, value] pairs — convert to object
+  const portfolio: Record<string, PortfolioPerformance> = {};
+  for (const [key, val] of raw) {
+    portfolio[key] = val;
+  }
+  return portfolio as unknown as Portfolio;
 }
 
 export async function getUserFills(

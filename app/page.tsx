@@ -6,6 +6,7 @@ import { Nav } from "@/components/nav";
 import { getLeaderboard, parseLeaderboard } from "@/lib/hyperliquid";
 import type { ParsedLeaderboardRow } from "@/lib/hyperliquid";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -184,9 +185,12 @@ export default async function Home() {
       {/* Footer */}
       <footer className="border-t border-border-subtle py-8 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <span className="text-accent font-mono font-bold text-sm">
-            HyperScore
-          </span>
+          <div className="flex items-center gap-2">
+            <Image src="/icon.png" alt="HyperScore" width={20} height={20} className="rounded" />
+            <span className="text-accent font-mono font-bold text-sm">
+              HyperScore
+            </span>
+          </div>
           <span className="text-muted text-xs">
             Data sourced from Hyperliquid L1
           </span>

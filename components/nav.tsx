@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface NavProps {
   active?: "home" | "leaderboard" | "trending" | "compare";
@@ -7,12 +8,18 @@ interface NavProps {
 export function Nav({ active }: NavProps) {
   return (
     <header className="border-b border-border-subtle sticky top-0 z-50 bg-bg/80 backdrop-blur-xl">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-accent font-bold text-xl font-mono tracking-tight"
-        >
-          HyperScore
+      <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/icon.png"
+            alt="HyperScore"
+            width={28}
+            height={28}
+            className="rounded-md"
+          />
+          <span className="text-accent font-bold text-lg font-mono tracking-tight hidden sm:inline">
+            HyperScore
+          </span>
         </Link>
         <nav className="flex items-center gap-5">
           <Link
