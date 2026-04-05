@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@vercel/analytics";
 import Link from "next/link";
 import { isValidAddress } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ export function SearchBar({ topTraderAddress, topTraderName }: SearchBarProps) {
       return;
     }
     setError("");
+    track("wallet_lookup", { address: trimmed });
     router.push(`/trader/${trimmed}`);
   }
 
@@ -53,6 +55,7 @@ export function SearchBar({ topTraderAddress, topTraderName }: SearchBarProps) {
         {topTraderAddress && (
           <Link
             href={`/trader/${topTraderAddress}`}
+            onClick={() => track("try_top_trader", { address: topTraderAddress })}
             className="text-muted text-xs hover:text-accent transition-colors"
           >
             Try a top trader{topTraderName ? ` (${topTraderName})` : ""} →

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import Link from "next/link";
 import { HyperScore } from "./hyper-score";
 import {
@@ -71,7 +72,7 @@ export function LeaderboardFilters({ rows }: { rows: Row[] }) {
           {timeframes.map((t) => (
             <button
               key={t}
-              onClick={() => setTf(t)}
+              onClick={() => { setTf(t); track("leaderboard_filter", { timeframe: t }); }}
               className={`px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-all ${
                 tf === t ? "bg-accent text-bg" : "text-muted hover:text-fg"
               }`}
@@ -84,7 +85,7 @@ export function LeaderboardFilters({ rows }: { rows: Row[] }) {
           {sorts.map((s) => (
             <button
               key={s.key}
-              onClick={() => setSortBy(s.key)}
+              onClick={() => { setSortBy(s.key); track("leaderboard_sort", { sortBy: s.key }); }}
               className={`px-3 py-1.5 rounded-md text-xs font-mono font-medium transition-all ${
                 sortBy === s.key
                   ? "bg-surface-raised text-fg"

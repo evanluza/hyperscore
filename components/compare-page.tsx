@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { track } from "@vercel/analytics";
 import { isValidAddress, shortenAddress, formatUsd, formatPnl, formatPercent, computeHyperScore } from "@/lib/utils";
 import { HyperScore } from "./hyper-score";
 import Link from "next/link";
@@ -131,6 +132,7 @@ export function ComparePage() {
     }
     setError("");
     setLoading(true);
+    track("compare_traders", { walletA: a, walletB: b });
     try {
       const [da, db] = await Promise.all([fetchTrader(a), fetchTrader(b)]);
       if (!da || !db) {

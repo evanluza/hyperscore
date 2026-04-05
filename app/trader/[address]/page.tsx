@@ -9,13 +9,14 @@ import {
   computeHyperScore,
 } from "@/lib/utils";
 import { HyperScore } from "@/components/hyper-score";
+import { ShareButton } from "@/components/share-button";
 import { StatCard } from "@/components/stat-card";
 import { EquityChart } from "@/components/equity-chart";
 import { PositionsTable } from "@/components/positions-table";
 import { RecentTrades } from "@/components/recent-trades";
 import { NextActions } from "@/components/next-actions";
 import { Nav } from "@/components/nav";
-import { HL_REFERRAL_URL } from "@/lib/constants";
+import { ReferralLink } from "@/components/referral-link";
 import Link from "next/link";
 
 interface Props {
@@ -135,12 +136,10 @@ export default async function TraderPage({ params }: Props) {
 
           {/* Actions */}
           <div className="flex flex-wrap gap-3 mt-6 border-t border-border-subtle pt-6">
-            <button
+            <ShareButton
+              address={address}
               className="bg-accent text-bg font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
-              onClick={undefined}
-            >
-              Share Profile
-            </button>
+            />
             <Link
               href={`/compare?a=${address}`}
               className="border border-border text-muted font-semibold px-5 py-2.5 rounded-lg text-sm hover:text-fg hover:border-accent/30 transition-all"
@@ -278,15 +277,13 @@ export default async function TraderPage({ params }: Props) {
           <p className="text-muted text-sm mb-3">
             Want to trade like the top performers on Hyperliquid?
           </p>
-          <a
-            href={HL_REFERRAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <ReferralLink
+            location="trader_profile"
             className="inline-flex items-center gap-2 bg-accent text-bg font-semibold px-6 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
           >
             Start Trading on Hyperliquid
             <span className="text-bg/60 text-xs">(4% fee discount)</span>
-          </a>
+          </ReferralLink>
         </div>
       </main>
     </div>

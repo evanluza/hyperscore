@@ -10,7 +10,7 @@ import {
 import { HyperScore } from "@/components/hyper-score";
 import { Nav } from "@/components/nav";
 import { NextActions } from "@/components/next-actions";
-import { HL_REFERRAL_URL } from "@/lib/constants";
+import { ReferralLink } from "@/components/referral-link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -157,14 +157,12 @@ export default async function TrendingPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <a
-            href={HL_REFERRAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <ReferralLink
+            location="trending"
             className="text-muted text-sm hover:text-accent transition-colors"
           >
             Start trading on Hyperliquid with 4% fee discount →
-          </a>
+          </ReferralLink>
         </div>
       </main>
     </div>
