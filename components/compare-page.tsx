@@ -78,7 +78,14 @@ export function ComparePage() {
       body: JSON.stringify({ type: "portfolio", user: address }),
     });
     if (!res2.ok) return null;
-    const portfolio = await res2.json();
+    const portfolioRaw = await res2.json();
+    // API returns [key, value] pairs — convert to object
+    const portfolio: Record<string, { pnlHistory: [number, string][]; vlm: string }> = {};
+    if (Array.isArray(portfolioRaw)) {
+      for (const [key, val] of portfolioRaw) {
+        portfolio[key] = val;
+      }
+    }
 
     const res3 = await fetch("https://api.hyperliquid.xyz/info", {
       method: "POST",
