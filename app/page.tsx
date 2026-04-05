@@ -23,6 +23,10 @@ export default async function Home() {
     rows = [];
   }
 
+  const topTrader = rows.length > 0
+    ? [...rows].sort((a, b) => b.allTimePnl - a.allTimePnl)[0]
+    : null;
+
   return (
     <div className="min-h-full bg-bg bg-grid">
       <Nav active="home" />
@@ -49,7 +53,7 @@ export default async function Home() {
           </div>
 
           <div className="max-w-2xl mx-auto animate-fade-up animate-fade-up-delay-1">
-            <SearchBar />
+            <SearchBar topTraderAddress={topTrader?.address} topTraderName={topTrader?.displayName || undefined} />
           </div>
         </div>
       </section>
@@ -158,7 +162,7 @@ export default async function Home() {
             full trading profile instantly.
           </p>
           <div className="max-w-2xl mx-auto">
-            <SearchBar />
+            <SearchBar topTraderAddress={topTrader?.address} topTraderName={topTrader?.displayName || undefined} />
           </div>
           <div className="flex justify-center gap-6 mt-8">
             <Link

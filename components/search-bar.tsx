@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { isValidAddress } from "@/lib/utils";
 
-export function SearchBar() {
+interface SearchBarProps {
+  topTraderAddress?: string;
+  topTraderName?: string;
+}
+
+export function SearchBar({ topTraderAddress, topTraderName }: SearchBarProps) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -45,12 +50,14 @@ export function SearchBar() {
       </form>
       {error && <p className="text-red text-xs mt-2 ml-1">{error}</p>}
       <div className="flex items-center gap-4 mt-3 ml-1">
-        <button
-          onClick={() => router.push("/trader/0x1a2b3c4d5e6f7890abcdef1234567890abcdef12")}
-          className="text-muted text-xs hover:text-accent transition-colors cursor-pointer"
-        >
-          Try a top trader →
-        </button>
+        {topTraderAddress && (
+          <Link
+            href={`/trader/${topTraderAddress}`}
+            className="text-muted text-xs hover:text-accent transition-colors"
+          >
+            Try a top trader{topTraderName ? ` (${topTraderName})` : ""} →
+          </Link>
+        )}
         <Link
           href="/leaderboard"
           className="text-muted text-xs hover:text-accent transition-colors"
