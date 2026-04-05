@@ -1,13 +1,12 @@
-import Link from "next/link";
 import { SearchBar } from "@/components/search-bar";
-import { ProfileCard } from "@/components/profile-card";
 import { LeaderboardPreview } from "@/components/leaderboard-preview";
-import { CompareModule } from "@/components/compare-module";
-import { ShareCardPreview } from "@/components/share-card-preview";
 import { TrendingSection } from "@/components/trending-section";
+import { LiveTicker } from "@/components/live-ticker";
+import { Nav } from "@/components/nav";
 import { getLeaderboard, parseLeaderboard } from "@/lib/hyperliquid";
-import { computeHyperScore } from "@/lib/utils";
+import type { ParsedLeaderboardRow } from "@/lib/hyperliquid";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "HyperScore — Your Trading Reputation. Proven.",
@@ -15,27 +14,8 @@ export const metadata: Metadata = {
     "Every trade, every win, every loss — pulled directly from the Hyperliquid order book. No edits. No fake PnL.",
 };
 
-function SectionHeader({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle?: string;
-}) {
-  return (
-    <div className="mb-8">
-      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-        {title}
-      </h2>
-      {subtitle && (
-        <p className="text-muted text-sm mt-2 max-w-lg">{subtitle}</p>
-      )}
-    </div>
-  );
-}
-
 export default async function Home() {
-  let rows: import("@/lib/hyperliquid").ParsedLeaderboardRow[] = [];
+  let rows: ParsedLeaderboardRow[] = [];
   try {
     const raw = await getLeaderboard();
     rows = parseLeaderboard(raw);
@@ -43,41 +23,17 @@ export default async function Home() {
     rows = [];
   }
 
-  // Top trader by all-time PnL for profile card
-  const topTrader = [...rows].sort((a, b) => b.allTimePnl - a.allTimePnl)[0];
-
   return (
     <div className="min-h-full bg-bg bg-grid">
-      {/* Nav */}
-      <header className="border-b border-border-subtle sticky top-0 z-50 bg-bg/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-accent font-bold text-xl font-mono tracking-tight"
-          >
-            HyperScore
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link
-              href="/leaderboard"
-              className="text-muted hover:text-fg text-sm transition-colors"
-            >
-              Leaderboard
-            </Link>
-            <span
-              className="text-muted/40 text-sm cursor-default"
-              title="Coming soon"
-            >
-              Claim Profile
-            </span>
-          </nav>
-        </div>
-      </header>
+      <Nav active="home" />
 
-      {/* Hero */}
-      <section className="pt-24 sm:pt-32 pb-20 px-6">
+      {/* Live ticker */}
+      {rows.length > 0 && <LiveTicker rows={rows} />}
+
+      {/* Hero — tight, punchy */}
+      <section className="pt-20 sm:pt-28 pb-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="max-w-3xl mx-auto text-center mb-12 animate-fade-up">
+          <div className="max-w-3xl mx-auto text-center mb-10 animate-fade-up">
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
               Your trading reputation.
               <br />
@@ -98,23 +54,52 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Profile Preview — real #1 trader */}
-      {topTrader && (
-        <section className="py-16 px-6">
+      {/* Top Traders — RIGHT under hero, not buried */}
+      {rows.length > 0 && (
+        <section className="py-12 px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="max-w-xl mx-auto animate-fade-up animate-fade-up-delay-2">
-              <ProfileCard
-                address={topTrader.address}
-                displayName={topTrader.displayName}
-                pnl30d={topTrader.monthRoi}
-                pnlAmount30d={topTrader.monthPnl}
-                winRate={65}
-                trades={Math.round(topTrader.allTimeVolume / 50000)}
-                accountValue={topTrader.accountValue}
-                rank={1}
-                hyperScore={computeHyperScore(topTrader.allTimeRoi, 65)}
-              />
+            <div className="flex items-end justify-between mb-6">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                  Top Traders Right Now
+                </h2>
+                <p className="text-muted text-sm mt-1">
+                  Real PnL. Real wallets. Updated every minute.
+                </p>
+              </div>
+              <Link
+                href="/leaderboard"
+                className="text-accent text-sm hover:underline font-medium hidden sm:block"
+              >
+                Full leaderboard →
+              </Link>
             </div>
+            <LeaderboardPreview rows={rows} />
+          </div>
+        </section>
+      )}
+
+      {/* Trending highlights */}
+      {rows.length > 0 && (
+        <section className="py-12 px-6 border-t border-border-subtle">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between mb-6">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                  Right Now
+                </h2>
+                <p className="text-muted text-sm mt-1">
+                  Live highlights from the order book.
+                </p>
+              </div>
+              <Link
+                href="/trending"
+                className="text-accent text-sm hover:underline font-medium hidden sm:block"
+              >
+                See all trends →
+              </Link>
+            </div>
+            <TrendingSection rows={rows} />
           </div>
         </section>
       )}
@@ -158,137 +143,36 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Trending — real data */}
-      {rows.length > 0 && (
-        <section className="py-16 px-6 border-t border-border-subtle">
-          <div className="max-w-6xl mx-auto">
-            <SectionHeader
-              title="Right Now"
-              subtitle="Live highlights from the Hyperliquid order book."
-            />
-            <TrendingSection rows={rows} />
-          </div>
-        </section>
-      )}
-
-      {/* Leaderboard — real data */}
-      {rows.length > 0 && (
-        <section className="py-16 px-6 border-t border-border-subtle">
-          <div className="max-w-6xl mx-auto">
-            <SectionHeader
-              title="Top Traders"
-              subtitle="Ranked by verified on-chain performance. No exceptions."
-            />
-            <LeaderboardPreview rows={rows} />
-          </div>
-        </section>
-      )}
-
-      {/* Share Card */}
-      <section className="py-16 px-6 border-t border-border-subtle">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <SectionHeader
-                title="Share Your Edge"
-                subtitle="Generate a verifiable trading card. Post it to X. Let your PnL do the talking."
-              />
-              <div className="space-y-4 text-sm">
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-mono text-xs mt-0.5">
-                    01
-                  </span>
-                  <span className="text-muted">
-                    Look up any wallet address
-                  </span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-mono text-xs mt-0.5">
-                    02
-                  </span>
-                  <span className="text-muted">
-                    Auto-generated card with verified stats
-                  </span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-accent font-mono text-xs mt-0.5">
-                    03
-                  </span>
-                  <span className="text-muted">
-                    One click to share — OG image renders on Twitter
-                  </span>
-                </div>
-              </div>
-            </div>
-            <ShareCardPreview />
-          </div>
-        </div>
-      </section>
-
-      {/* Compare */}
-      <section className="py-16 px-6 border-t border-border-subtle">
-        <div className="max-w-6xl mx-auto">
-          <SectionHeader
-            title="Compare Traders"
-            subtitle="Head-to-head. Verified stats. No hiding."
-          />
-          <div className="max-w-2xl">
-            <CompareModule />
-          </div>
-        </div>
-      </section>
-
-      {/* HyperScore explainer */}
-      <section className="py-20 px-6 border-t border-border-subtle">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="text-muted text-[10px] uppercase tracking-[0.2em] mb-4">
-              Introducing
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              Hyper<span className="text-gradient">Score</span>
-            </h2>
-            <p className="text-muted text-sm leading-relaxed max-w-md mx-auto mb-8">
-              A composite score based on performance, consistency, and risk
-              management. One number that captures how good a trader really is.
-            </p>
-            <div className="grid grid-cols-3 gap-6 max-w-sm mx-auto">
-              <div>
-                <div className="text-fg font-mono font-bold text-lg">PnL</div>
-                <div className="text-muted text-[10px] uppercase tracking-widest">
-                  Returns
-                </div>
-              </div>
-              <div>
-                <div className="text-fg font-mono font-bold text-lg">
-                  Sharpe
-                </div>
-                <div className="text-muted text-[10px] uppercase tracking-widest">
-                  Risk-adj
-                </div>
-              </div>
-              <div>
-                <div className="text-fg font-mono font-bold text-lg">WR%</div>
-                <div className="text-muted text-[10px] uppercase tracking-widest">
-                  Consistency
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
+      {/* CTA — emotional hook */}
       <section className="py-20 px-6 border-t border-border-subtle">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-            What&apos;s your score?
+          <div className="text-muted text-[10px] uppercase tracking-[0.2em] mb-4">
+            Find out in 2 seconds
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-3">
+            What&apos;s your{" "}
+            <span className="text-gradient">HyperScore</span>?
           </h2>
-          <p className="text-muted text-sm mb-8">
-            Paste your wallet. Find out in seconds.
+          <p className="text-muted text-sm mb-8 max-w-md mx-auto">
+            Paste your Hyperliquid wallet. Get your verified score, rank, and
+            full trading profile instantly.
           </p>
           <div className="max-w-2xl mx-auto">
             <SearchBar />
+          </div>
+          <div className="flex justify-center gap-6 mt-8">
+            <Link
+              href="/compare"
+              className="text-muted text-sm hover:text-accent transition-colors"
+            >
+              Compare two traders →
+            </Link>
+            <Link
+              href="/trending"
+              className="text-muted text-sm hover:text-accent transition-colors"
+            >
+              See who&apos;s trending →
+            </Link>
           </div>
         </div>
       </section>

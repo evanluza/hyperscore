@@ -6,11 +6,15 @@ import {
   formatUsd,
   formatPnl,
   formatPercent,
+  computeHyperScore,
 } from "@/lib/utils";
+import { HyperScore } from "@/components/hyper-score";
 import { StatCard } from "@/components/stat-card";
 import { EquityChart } from "@/components/equity-chart";
 import { PositionsTable } from "@/components/positions-table";
 import { RecentTrades } from "@/components/recent-trades";
+import { NextActions } from "@/components/next-actions";
+import { Nav } from "@/components/nav";
 import Link from "next/link";
 
 interface Props {
@@ -26,12 +30,48 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+function deriveStrategy(stats: {
+  winRate: number;
+  totalTrades: number;
+  avgTradeSize: number;
+  bestTrade: number;
+  worstTrade: number;
+  positions: { coin: string }[];
+  recentFills: { coin: string; dir: string }[];
+}) {
+  const hints: string[] = [];
+
+  if (stats.winRate > 65) hints.push("High win-rate trader — selective entries");
+  else if (stats.winRate > 50) hints.push("Balanced approach — moderate selectivity");
+  else hints.push("High-risk style — relies on outsized winners");
+
+  if (stats.totalTrades > 500) hints.push("Very active — likely scalping or day trading");
+  else if (stats.totalTrades > 100) hints.push("Moderately active — swing or positional");
+  else hints.push("Low frequency — conviction-based entries");
+
+  const coins = stats.recentFills.map((f) => f.coin);
+  const unique = new Set(coins);
+  if (unique.size > 10) hints.push("Diversified — trades many markets");
+  else if (unique.size > 3) hints.push("Focused — trades a handful of markets");
+  else hints.push("Concentrated — specialist in " + (coins[0] || "select markets"));
+
+  const longs = stats.recentFills.filter(
+    (f) => f.dir === "Open Long" || f.dir === "Buy"
+  ).length;
+  const shorts = stats.recentFills.filter(
+    (f) => f.dir === "Open Short" || f.dir === "Sell"
+  ).length;
+  if (longs > shorts * 2) hints.push("Long-biased — bullish positioning");
+  else if (shorts > longs * 2) hints.push("Short-biased — bearish or hedging");
+  else hints.push("Directionally balanced — plays both sides");
+
+  return hints;
+}
+
 export default async function TraderPage({ params }: Props) {
   const { address } = await params;
 
-  if (!isValidAddress(address)) {
-    notFound();
-  }
+  if (!isValidAddress(address)) notFound();
 
   let stats;
   try {
@@ -40,52 +80,80 @@ export default async function TraderPage({ params }: Props) {
     notFound();
   }
 
-  const pnlColor = (v: number) => (v >= 0 ? ("green" as const) : ("red" as const));
+  const pnlColor = (v: number) =>
+    v >= 0 ? ("green" as const) : ("red" as const);
+  const hyperScore = computeHyperScore(
+    stats.totalPnl > 0 ? (stats.totalPnl / Math.max(stats.accountValue, 1)) * 100 : -10,
+    stats.winRate
+  );
+  const strategyHints = deriveStrategy(stats);
 
   return (
     <div className="min-h-full bg-bg bg-grid">
-      {/* Header */}
-      <header className="border-b border-border-subtle sticky top-0 z-50 bg-bg/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-accent font-bold text-xl font-mono tracking-tight"
-          >
-            HyperScore
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link
-              href="/leaderboard"
-              className="text-muted hover:text-fg text-sm transition-colors"
-            >
-              Leaderboard
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Nav />
 
       <main className="max-w-6xl mx-auto px-6 py-12">
-        {/* Address header */}
-        <div className="mb-10">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-mono font-bold text-sm">
-              {address.slice(2, 4).toUpperCase()}
+        {/* Profile hero */}
+        <div className="glass glow-green rounded-2xl p-6 sm:p-8 mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            {/* Left: identity */}
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-mono font-bold text-lg">
+                {address.slice(2, 4).toUpperCase()}
+              </div>
+              <div>
+                <h1 className="font-mono text-xl font-semibold">
+                  {shortenAddress(address)}
+                </h1>
+                <p className="text-muted text-xs font-mono mt-0.5 break-all max-w-xs sm:max-w-md">
+                  {address}
+                </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-[10px] bg-accent/10 text-accent px-2 py-0.5 rounded-full font-mono uppercase tracking-wider">
+                    {formatUsd(stats.accountValue)} Account
+                  </span>
+                </div>
+              </div>
             </div>
-            <div>
-              <h1 className="font-mono text-xl font-semibold">
-                {shortenAddress(address)}
-              </h1>
-              <p className="text-muted text-xs font-mono">{address}</p>
+
+            {/* Right: HyperScore */}
+            <div className="flex items-center gap-6">
+              <div className="text-right hidden sm:block">
+                <div className="text-muted text-[10px] uppercase tracking-widest mb-1">
+                  All-Time PnL
+                </div>
+                <div
+                  className={`font-mono font-bold text-2xl ${stats.totalPnl >= 0 ? "text-green" : "text-red"}`}
+                >
+                  {formatPnl(stats.totalPnl)}
+                </div>
+              </div>
+              <HyperScore score={hyperScore} size="lg" />
             </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 mt-6 border-t border-border-subtle pt-6">
+            <button
+              className="bg-accent text-bg font-semibold px-6 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
+              onClick={undefined}
+            >
+              Share Profile
+            </button>
+            <Link
+              href={`/compare?a=${address}`}
+              className="border border-border text-muted font-semibold px-6 py-2.5 rounded-lg text-sm hover:text-fg hover:border-accent/30 transition-all"
+            >
+              Compare
+            </Link>
+            <span className="border border-border text-muted/40 font-semibold px-6 py-2.5 rounded-lg text-sm cursor-default">
+              Follow (soon)
+            </span>
           </div>
         </div>
 
-        {/* PnL summary row */}
+        {/* PnL summary — visible on mobile too */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-          <StatCard
-            label="Account Value"
-            value={formatUsd(stats.accountValue)}
-          />
           <StatCard
             label="All-Time PnL"
             value={formatPnl(stats.totalPnl)}
@@ -98,6 +166,10 @@ export default async function TraderPage({ params }: Props) {
           <StatCard
             label="Total Trades"
             value={stats.totalTrades.toLocaleString()}
+          />
+          <StatCard
+            label="Volume"
+            value={formatUsd(stats.totalVolume)}
           />
         </div>
 
@@ -120,26 +192,28 @@ export default async function TraderPage({ params }: Props) {
           />
         </div>
 
-        {/* Equity curve */}
-        <div className="glass rounded-xl p-5 mb-6">
-          <h2 className="text-[10px] text-muted uppercase tracking-widest mb-4">
-            Equity Curve
-          </h2>
-          <EquityChart data={stats.equityCurve} height={240} />
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div className="glass rounded-xl p-5">
+            <h2 className="text-[10px] text-muted uppercase tracking-widest mb-4">
+              Equity Curve
+            </h2>
+            <EquityChart data={stats.equityCurve} height={220} />
+          </div>
+          <div className="glass rounded-xl p-5">
+            <h2 className="text-[10px] text-muted uppercase tracking-widest mb-4">
+              Cumulative PnL
+            </h2>
+            <EquityChart data={stats.pnlCurve} height={220} />
+          </div>
         </div>
 
-        {/* PnL curve */}
-        <div className="glass rounded-xl p-5 mb-6">
-          <h2 className="text-[10px] text-muted uppercase tracking-widest mb-4">
-            Cumulative PnL
-          </h2>
-          <EquityChart data={stats.pnlCurve} height={200} />
-        </div>
-
-        {/* Trade stats */}
+        {/* Best/worst */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-          <StatCard label="Volume" value={formatUsd(stats.totalVolume)} />
-          <StatCard label="Avg Trade" value={formatUsd(stats.avgTradeSize)} />
+          <StatCard
+            label="Avg Trade"
+            value={formatUsd(stats.avgTradeSize)}
+          />
           <StatCard
             label="Best Trade"
             value={formatPnl(stats.bestTrade)}
@@ -150,6 +224,28 @@ export default async function TraderPage({ params }: Props) {
             value={formatPnl(stats.worstTrade)}
             color="red"
           />
+          <StatCard
+            label="HyperScore"
+            value={`${hyperScore}/100`}
+            color={hyperScore >= 60 ? "green" : "red"}
+          />
+        </div>
+
+        {/* Strategy hints */}
+        <div className="glass rounded-xl p-5 mb-6">
+          <h2 className="text-[10px] text-muted uppercase tracking-widest mb-4">
+            Strategy Profile
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {strategyHints.map((hint, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <span className="text-accent font-mono text-xs mt-0.5 shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-sm text-muted">{hint}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Open Positions */}
@@ -166,6 +262,14 @@ export default async function TraderPage({ params }: Props) {
             Recent Trades
           </h2>
           <RecentTrades fills={stats.recentFills} />
+        </div>
+
+        {/* Next actions — kill dead ends */}
+        <div className="mb-8">
+          <h2 className="text-[10px] text-muted uppercase tracking-widest mb-4">
+            Keep Exploring
+          </h2>
+          <NextActions currentAddress={address} />
         </div>
       </main>
     </div>
