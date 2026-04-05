@@ -162,7 +162,7 @@ export function ComparePage() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* Inputs */}
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
         <input
           type="text"
           value={addrA}
@@ -170,7 +170,7 @@ export function ComparePage() {
           placeholder="Wallet A (0x...)"
           className="flex-1 bg-surface border border-border rounded-lg px-4 py-3 font-mono text-xs text-fg placeholder:text-muted/50 focus:outline-none focus:border-accent/40 transition-colors"
         />
-        <span className="text-accent font-bold text-lg shrink-0 font-mono">
+        <span className="text-accent font-bold text-lg shrink-0 font-mono text-center">
           VS
         </span>
         <input

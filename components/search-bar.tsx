@@ -38,11 +38,11 @@ export function SearchBar({ topTraderAddress, topTraderName }: SearchBarProps) {
               setError("");
             }}
             placeholder="Enter wallet or ENS (0x... or name.eth)"
-            className="w-full bg-surface border border-border rounded-xl px-5 py-4 pr-28 font-mono text-sm text-fg placeholder:text-muted/50 focus:outline-none focus:border-accent/40 focus:shadow-[0_0_20px_rgba(34,214,138,0.06)] transition-all"
+            className="w-full bg-surface border border-border rounded-xl px-4 sm:px-5 py-3.5 sm:py-4 pr-24 sm:pr-28 font-mono text-xs sm:text-sm text-fg placeholder:text-muted/50 focus:outline-none focus:border-accent/40 focus:shadow-[0_0_20px_rgba(151,252,228,0.06)] transition-all"
           />
           <button
             type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-bg font-semibold px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-bg font-semibold px-4 sm:px-5 py-2 rounded-lg text-xs sm:text-sm hover:opacity-90 transition-opacity"
           >
             Look up
           </button>

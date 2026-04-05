@@ -37,10 +37,10 @@ export default async function Home() {
       {rows.length > 0 && <LiveTicker rows={rows} />}
 
       {/* Hero — tight, punchy */}
-      <section className="pt-20 sm:pt-28 pb-16 px-6">
+      <section className="pt-16 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="max-w-3xl mx-auto text-center mb-10 animate-fade-up">
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
+            <h1 className="text-3xl sm:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
               Your trading reputation.
               <br />
               <span className="text-gradient">Proven.</span>
@@ -62,7 +62,7 @@ export default async function Home() {
 
       {/* Top Traders — RIGHT under hero, not buried */}
       {rows.length > 0 && (
-        <section className="py-12 px-6">
+        <section className="py-12 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-end justify-between mb-6">
               <div>
@@ -87,7 +87,7 @@ export default async function Home() {
 
       {/* Trending highlights */}
       {rows.length > 0 && (
-        <section className="py-12 px-6 border-t border-border-subtle">
+        <section className="py-12 px-4 sm:px-6 border-t border-border-subtle">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-end justify-between mb-6">
               <div>
@@ -111,7 +111,7 @@ export default async function Home() {
       )}
 
       {/* Value props */}
-      <section className="py-16 px-6 border-t border-border-subtle">
+      <section className="py-16 px-4 sm:px-6 border-t border-border-subtle">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
             <div className="text-center">
@@ -150,12 +150,12 @@ export default async function Home() {
       </section>
 
       {/* CTA — emotional hook */}
-      <section className="py-20 px-6 border-t border-border-subtle">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 border-t border-border-subtle">
         <div className="max-w-6xl mx-auto text-center">
           <div className="text-muted text-[10px] uppercase tracking-[0.2em] mb-4">
             Find out in 2 seconds
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-3">
+          <h2 className="text-2xl sm:text-5xl font-bold tracking-tight mb-3">
             What&apos;s your{" "}
             <span className="text-gradient">HyperScore</span>?
           </h2>
@@ -194,7 +194,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border-subtle py-8 px-6">
+      <footer className="border-t border-border-subtle py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Image src="/icon.png" alt="HyperScore" width={20} height={20} className="rounded" />

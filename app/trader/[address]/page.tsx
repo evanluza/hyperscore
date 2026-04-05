@@ -93,7 +93,7 @@ export default async function TraderPage({ params }: Props) {
     <div className="min-h-full bg-bg bg-grid">
       <Nav />
 
-      <main className="max-w-6xl mx-auto px-6 py-12">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Profile hero */}
         <div className="glass glow-green rounded-2xl p-6 sm:p-8 mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -134,20 +134,20 @@ export default async function TraderPage({ params }: Props) {
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 mt-6 border-t border-border-subtle pt-6">
+          <div className="flex flex-wrap gap-3 mt-6 border-t border-border-subtle pt-6">
             <button
-              className="bg-accent text-bg font-semibold px-6 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
+              className="bg-accent text-bg font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
               onClick={undefined}
             >
               Share Profile
             </button>
             <Link
               href={`/compare?a=${address}`}
-              className="border border-border text-muted font-semibold px-6 py-2.5 rounded-lg text-sm hover:text-fg hover:border-accent/30 transition-all"
+              className="border border-border text-muted font-semibold px-5 py-2.5 rounded-lg text-sm hover:text-fg hover:border-accent/30 transition-all"
             >
               Compare
             </Link>
-            <span className="border border-border text-muted/40 font-semibold px-6 py-2.5 rounded-lg text-sm cursor-default">
+            <span className="border border-border text-muted/40 font-semibold px-5 py-2.5 rounded-lg text-sm cursor-default hidden sm:inline-block">
               Follow (soon)
             </span>
           </div>
